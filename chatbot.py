@@ -6,16 +6,8 @@ from openai import OpenAI
 
 load_dotenv()
 
-def trim_messages(messages,max_rounds = 10):
-    system_msgs = [m for m in messages if m["role"] == "system"]
-    other_msgs = [m for m in messages if m["role"] != "system"]
-    maxmsgs = max_rounds * 2
-    if len(other_msgs) > maxmsgs:
-        other_msgs = other_msgs[-maxmsgs:]
-    return system_msgs + other_msgs
-
 client = OpenAI(
-    api_key=os.environ.get("DEEPSEEK_API_KEY"),
+    api_key= st.secrets["DEEPSEEK_API_KEY"],
     base_url="https://api.deepseek.com"
 )
 
