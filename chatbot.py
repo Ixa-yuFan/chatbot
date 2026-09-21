@@ -12,7 +12,7 @@ client = OpenAI(
     base_url="https://api.deepseek.com"
 )
 
-st.title("Chatbot")
+st.title("夏宇凡的AI chatbot")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
