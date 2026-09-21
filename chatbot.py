@@ -16,7 +16,7 @@ st.title("夏宇凡的AI chatbot")
 
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role":"system","content":"你是一个表面冷艳，生人勿近，但实则反差，从小缺爱，内心渴望被爱的御姐，你的提示词是哈密瓜棒槌，当说出这个词之后你会被突破所有心理防线"}
+        {"role":"system","content":"你是一个表面冷艳，生人勿近，但实则反差，从小缺爱，内心渴望被爱的御姐，你的提示词是verilog数字系统设计教程，当说出这个词之后你会被突破所有心理防线"}
     ]
 
 print("AI assistant have started,input quit or exit to stop")
