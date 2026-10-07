@@ -131,6 +131,7 @@ with st.sidebar:                     #网站侧边设置功能
     uploaded_file = st.file_uploader("上传文档",type = ["pdf","txt"])
     if uploaded_file is not None:
         save_path = os.path.join("docs",uploaded_file.name)
+        print(f"准备保存到:{save_path}")
         with open(save_path,"wb") as f:
             f.wirte(uploaded_file.getbuffer())
         st.success(f"已上传:{uploaded_file.name}")
