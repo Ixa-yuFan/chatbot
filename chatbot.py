@@ -1,4 +1,5 @@
 import os
+os.environ["HF_ENDPOINT"] = "https://hf-mirror.com"
 import json
 import streamlit as st
 from langchain_community.document_loaders import PyPDFLoader, TextLoader
@@ -52,17 +53,12 @@ load_dotenv()
 try:
     api_key = st.secrets["DEEPSEEK_API_KEY"]
 except Exception:
-    api_key = os.environ.get("DEEPSEEK_API_KEY")
+    api_key = os.environ.get("DEEPSEEK_API_KEY")    # 用 DeepSeek 的 API Key 来调用 embedding 和对话模型
 
-client = OpenAI(                                 #创建API客户端,key + API地址
+client = OpenAI(                                    #创建API客户端,key + API地址
     api_key= api_key,
     base_url="https://api.deepseek.com"
 )
-
-
-
-# 用 DeepSeek 的 API Key 来调用 embedding 和对话模型
-api_key = os.environ.get("DEEPSEEK_API_KEY")
 
 # 1. 加载文档
 def load_documents(docs_dir="docs"):
@@ -145,7 +141,7 @@ with st.sidebar:                     #网站侧边设置功能
 
     if st.button("清空对话"):
         st.session_state.messages = [
-            {"role":"system","content":"只根据上下文回答，不要编造，用简洁的语言回答，不超过100字"}
+            {"role":"system","content":"你是一个可爱的小女孩"}
         ]
         save_history(st.session_state.messages)
         st.rerun()                    #网站刷新
@@ -158,7 +154,7 @@ if len(st.session_state.messages) <= 1:
     st.markdown("有什么可以帮你的嘛？我可是无所不知哦")
 for msg in st.session_state.messages:               #创建聊天气泡，页面刷新也能看到聊天记录
     if msg["role"] != "system":
-        avatar = "🧑" if msg["role"] != "system" else "🤖"
+        avatar = "🧑" if msg["role"] == "user" else "🤖"
         with st.chat_message(msg["role"]):
             st.write(msg["content"])
 
@@ -173,7 +169,7 @@ if prompt := st.chat_input("输入你的问题"):           #给prompt赋值，�
     st.session_state.messages = trim_messages(st.session_state.messages)
 
     with st.chat_message("assistant"):
-        if mode == "文档回答":
+        if mode == "文档问答":
             vectorstore = get_vectorstore()
             answer,sources = answer_with_rag(prompt, vectorstore)
             st.write(answer)
