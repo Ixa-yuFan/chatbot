@@ -145,7 +145,7 @@ with st.sidebar:                     #网站侧边设置功能
 
     if st.button("清空对话"):
         st.session_state.messages = [
-            {"role":"system","content":"你是一个可爱的小女孩"}
+            {"role":"system","content":"只根据上下文回答，不要编造，用简洁的语言回答，不超过100字"}
         ]
         save_history(st.session_state.messages)
         st.rerun()                    #网站刷新
@@ -184,12 +184,12 @@ if prompt := st.chat_input("输入你的问题"):           #给prompt赋值，�
                 messages = st.session_state.messages,
                 stream = True
             )
-        placeholder = st.empty()
-        for chunk in response:
-            if chunk.choices[0].delta.content:
-                piece = chunk.choices[0].delta.content
-                full_reply = full_reply + piece
-                placeholder.write(full_reply)
+            placeholder = st.empty()
+            for chunk in response:
+                if chunk.choices[0].delta.content:
+                    piece = chunk.choices[0].delta.content
+                    full_reply = full_reply + piece
+                    placeholder.write(full_reply)
 
     st.session_state.messages.append({"role":"assistant","content":full_reply})
 
