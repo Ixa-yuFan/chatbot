@@ -66,7 +66,13 @@ api_key = os.environ.get("DEEPSEEK_API_KEY")
 
 # 1. 加载文档
 def load_documents(docs_dir="docs"):
+    from langchain_core.documents import Document
     documents = []
+
+    if "uploaded_text" in st.session_state:
+        documents.append(Document(page_content=st.session_state["uploaded_text"]))
+        return documents
+
     for filename in os.listdir(docs_dir):
         filepath = os.path.join(docs_dir, filename)
         if filename.endswith(".pdf"):
@@ -130,11 +136,11 @@ with st.sidebar:                     #网站侧边设置功能
     mode = st.radio("模式",["普通聊天","文档问答"])
     uploaded_file = st.file_uploader("上传文档",type = ["pdf","txt"])
     if uploaded_file is not None:
-        save_path = os.path.join("docs",uploaded_file.name)
-        print(f"准备保存到:{save_path}")
-        with open(save_path,"wb") as f:
-            f.wirte(uploaded_file.getbuffer())
-        st.success(f"已上传:{uploaded_file.name}")
+        if uploaded_file.name.endswith(".txt"):
+            st.session_state["uploaded_text"] = uploaded_file.read().decode("utf-8")
+            st.success(f"已上传:{uploaded_file.name}")
+        elif uploaded_file.name.endswith(".pdf"):
+            st.warning("暂时只支持TXT文件")
         st.cache_resource.clear()
 
     if st.button("清空对话"):
